@@ -1,0 +1,183 @@
+/* _content/WeatherDashboard.Web/Components/Layout/MainLayout.razor.rz.scp.css */
+.page[b-4w3bafe494] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main[b-4w3bafe494] {
+    flex: 1;
+}
+
+.sidebar[b-4w3bafe494] {
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid var(--surface-border);
+}
+
+.top-row[b-4w3bafe494] {
+    background: transparent;
+    justify-content: flex-end;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.top-row[b-4w3bafe494]  a, .top-row[b-4w3bafe494]  .btn-link {
+    white-space: nowrap;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.top-row[b-4w3bafe494]  a:hover, .top-row[b-4w3bafe494]  .btn-link:hover {
+    color: var(--text-primary);
+}
+
+@media (max-width: 640.98px) {
+    .top-row[b-4w3bafe494] {
+        justify-content: space-between;
+    }
+
+    .sidebar[b-4w3bafe494] {
+        border-right: none;
+        border-bottom: 1px solid var(--surface-border);
+    }
+}
+
+@media (min-width: 641px) {
+    .page[b-4w3bafe494] {
+        flex-direction: row;
+    }
+
+    .sidebar[b-4w3bafe494] {
+        width: 270px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .top-row[b-4w3bafe494] {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .top-row[b-4w3bafe494], article[b-4w3bafe494] {
+        padding-left: 4rem !important;
+        padding-right: 4rem !important;
+    }
+}
+
+#blazor-error-ui[b-4w3bafe494] {
+    background: var(--danger);
+    color: white;
+    bottom: 0;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+    display: none;
+    left: 0;
+    padding: 1rem 2rem;
+    position: fixed;
+    width: 100%;
+    z-index: 2000;
+}
+
+#blazor-error-ui .dismiss[b-4w3bafe494] {
+    cursor: pointer;
+    position: absolute;
+    right: 1.5rem;
+    top: 1rem;
+    font-size: 1.25rem;
+}
+/* _content/WeatherDashboard.Web/Components/Layout/NavMenu.razor.rz.scp.css */
+.navbar-toggler[b-yhdm2hb9uu] {
+    appearance: none;
+    cursor: pointer;
+    width: 3rem;
+    height: 3rem;
+    color: white;
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 12px;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.top-row[b-yhdm2hb9uu] {
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+}
+
+.navbar-brand[b-yhdm2hb9uu] {
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-item[b-yhdm2hb9uu] {
+    padding: 0.25rem 1rem;
+}
+
+.nav-item[b-yhdm2hb9uu]  a {
+    color: var(--text-secondary);
+    border-radius: 12px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.nav-item[b-yhdm2hb9uu]  a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    transform: translateX(4px);
+}
+
+.nav-item[b-yhdm2hb9uu]  a.active {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(236, 72, 153, 0.1));
+    color: var(--text-primary);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item[b-yhdm2hb9uu]  a.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 4px;
+    height: 20px;
+    background: var(--primary);
+    border-radius: 0 4px 4px 0;
+}
+
+.nav-scrollable[b-yhdm2hb9uu] {
+    display: none;
+}
+
+@media (min-width: 641px) {
+    .navbar-toggler[b-yhdm2hb9uu] {
+        display: none;
+    }
+
+    .nav-scrollable[b-yhdm2hb9uu] {
+        display: block;
+        height: calc(100vh - 4rem);
+        overflow-y: auto;
+        padding-top: 1rem;
+    }
+}

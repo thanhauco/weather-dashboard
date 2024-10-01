@@ -1,0 +1,421 @@
+﻿@page "/"
+
+<PageTitle>Dashboard | TaskMaster</PageTitle>
+
+<div class="dashboard animate-fade-in">
+    <header class="mb-5">
+        <h1 class="gradient-text display-5">Dashboard</h1>
+        <p class="text-secondary">Welcome back! Here's what's happening today.</p>
+    </header>
+    
+    @if (Stats is null)
+    {
+        <div class="loading-grid">
+            <div class="glass skeleton-card"></div>
+            <div class="glass skeleton-card"></div>
+            <div class="glass skeleton-card"></div>
+            <div class="glass skeleton-card"></div>
+        </div>
+    }
+    else
+    {
+        <div class="stats-grid">
+            <div class="stat-card glass total">
+                <div class="stat-icon-wrapper">📝</div>
+                <div class="stat-content">
+                    <span class="stat-value">@Stats.TotalTasks</span>
+                    <span class="stat-label">Total Tasks</span>
+                </div>
+            </div>
+            <div class="stat-card glass completed">
+                <div class="stat-icon-wrapper">✅</div>
+                <div class="stat-content">
+                    <span class="stat-value">@Stats.CompletedTasks</span>
+                    <span class="stat-label">Completed</span>
+                </div>
+            </div>
+            <div class="stat-card glass in-progress">
+                <div class="stat-icon-wrapper">🔄</div>
+                <div class="stat-content">
+                    <span class="stat-value">@Stats.InProgressTasks</span>
+                    <span class="stat-label">In Progress</span>
+                </div>
+            </div>
+            <div class="stat-card glass overdue">
+                <div class="stat-icon-wrapper">⚠️</div>
+                <div class="stat-content">
+                    <span class="stat-value">@Stats.OverdueTasks</span>
+                    <span class="stat-label">Overdue</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-columns">
+            <div class="column glass">
+                <div class="column-header">
+                    <span class="column-icon">📅</span>
+                    <h3>Upcoming Deadlines</h3>
+                </div>
+                <div class="task-list">
+                    @if (Stats.UpcomingDeadlines.Any())
+                    {
+                        @foreach (var task in Stats.UpcomingDeadlines)
+                        {
+                            <div class="task-item @GetPriorityClass(task.Priority)">
+                                <div class="task-info">
+                                    <span class="task-title">@task.Title</span>
+                                    <span class="task-due">@FormatDueDate(task.DueDate)</span>
+                                </div>
+                                <div class="priority-dot"></div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <span class="empty-icon">🎉</span>
+                            <p>No upcoming deadlines</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="column glass">
+                <div class="column-header">
+                    <span class="column-icon">🏆</span>
+                    <h3>Recently Completed</h3>
+                </div>
+                <div class="task-list">
+                    @if (Stats.RecentlyCompleted.Any())
+                    {
+                        @foreach (var task in Stats.RecentlyCompleted)
+                        {
+                            <div class="task-item completed-task">
+                                <div class="task-info">
+                                    <span class="task-title">@task.Title</span>
+                                    <span class="task-completed">@FormatCompletedDate(task.CompletedAt)</span>
+                                </div>
+                                <span class="check-icon">✓</span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <span class="empty-icon">📥</span>
+                            <p>No completions yet</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="column glass">
+                <div class="column-header">
+                    <span class="column-icon">📊</span>
+                    <h3>Tasks Distribution</h3>
+                </div>
+                <div class="chart-container">
+                    @foreach (var status in Stats.TasksByStatus)
+                    {
+                        <div class="bar-row">
+                            <div class="bar-info">
+                                <span class="bar-label">@status.Status</span>
+                                <span class="bar-value">@status.Count</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill @status.Status.ToLower()" style="width: @GetBarWidth(status.Count, Stats.TotalTasks)"></div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private DashboardStats? Stats { get; set; }
+
+    [Inject]
+    public TaskManagerApiClient ApiClient { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Stats = await ApiClient.GetDashboardStatsAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading dashboard: {ex.Message}");
+        }
+    }
+
+    private string GetPriorityClass(TaskPriority priority) => priority switch
+    {
+        TaskPriority.Critical => "priority-critical",
+        TaskPriority.High => "priority-high",
+        TaskPriority.Medium => "priority-medium",
+        _ => "priority-low"
+    };
+
+    private string FormatDueDate(DateTime? dueDate)
+    {
+        if (dueDate is null) return "No due date";
+        var days = (dueDate.Value.Date - DateTime.UtcNow.Date).Days;
+        return days switch
+        {
+            0 => "Today",
+            1 => "Tomorrow",
+            < 0 => $"{Math.Abs(days)} days ago",
+            _ => $"In {days} days"
+        };
+    }
+
+    private string FormatCompletedDate(DateTime? completedAt)
+    {
+        if (completedAt is null) return "";
+        var days = (DateTime.UtcNow.Date - completedAt.Value.Date).Days;
+        return days switch
+        {
+            0 => "Today",
+            1 => "Yesterday",
+            _ => $"{days} days ago"
+        };
+    }
+
+    private string GetBarWidth(int count, int total)
+    {
+        if (total == 0) return "0%";
+        return $"{(count * 100 / total)}%";
+    }
+}
+
+<style>
+    .dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .stat-card {
+        padding: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-icon-wrapper {
+        font-size: 2.5rem;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+    }
+
+    .stat-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Columns */
+    .dashboard-columns {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+    }
+
+    .column {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .column-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .column-icon {
+        font-size: 1.5rem;
+    }
+
+    .column h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    /* Task List */
+    .task-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .task-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        border: 1px solid transparent;
+        transition: all 0.2s ease;
+    }
+
+    .task-item:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: var(--surface-border);
+        transform: scale(1.02);
+    }
+
+    .task-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .task-title {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .task-due, .task-completed {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+    }
+
+    .priority-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+
+    .priority-critical .priority-dot { background: var(--danger); box-shadow: 0 0 10px var(--danger); }
+    .priority-high .priority-dot { background: var(--warning); box-shadow: 0 0 10px var(--warning); }
+    .priority-medium .priority-dot { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
+    .priority-low .priority-dot { background: var(--success); box-shadow: 0 0 10px var(--success); }
+
+    .check-icon {
+        color: var(--success);
+        font-weight: 700;
+        font-size: 1.25rem;
+    }
+
+    /* Chart */
+    .chart-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .bar-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .bar-info {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .bar-label {
+        color: var(--text-secondary);
+    }
+
+    .bar-track {
+        height: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .bar-fill {
+        height: 100%;
+        border-radius: 6px;
+        transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .bar-fill.todo { background: var(--text-secondary); }
+    .bar-fill.inprogress { background: linear-gradient(90deg, var(--warning), #f97316); }
+    .bar-fill.review { background: linear-gradient(90deg, var(--accent), var(--secondary)); }
+    .bar-fill.done { background: linear-gradient(90deg, var(--success), #059669); }
+
+    /* Loading/Empty States */
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-secondary);
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .loading-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .skeleton-card {
+        height: 120px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .skeleton-card::after {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+        animation: shimmer 1.5s infinite;
+    }
+
+    @@keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+</style>

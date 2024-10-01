@@ -1,0 +1,12 @@
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/bin/Debug/net8.0/WeatherDashboard.ServiceDefaults.deps.json
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/bin/Debug/net8.0/WeatherDashboard.ServiceDefaults.dll
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/bin/Debug/net8.0/WeatherDashboard.ServiceDefaults.pdb
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/obj/Debug/net8.0/WeatherDashboard.ServiceDefaults.csproj.AssemblyReference.cache
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/obj/Debug/net8.0/WeatherDashboard.ServiceDefaults.GeneratedMSBuildEditorConfig.editorconfig
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/obj/Debug/net8.0/WeatherDashboard.ServiceDefaults.AssemblyInfoInputs.cache
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/obj/Debug/net8.0/WeatherDashboard.ServiceDefaults.AssemblyInfo.cs
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/obj/Debug/net8.0/WeatherDashboard.ServiceDefaults.csproj.CoreCompileInputs.cache
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/obj/Debug/net8.0/WeatherDashboard.ServiceDefaults.dll
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/obj/Debug/net8.0/refint/WeatherDashboard.ServiceDefaults.dll
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/obj/Debug/net8.0/WeatherDashboard.ServiceDefaults.pdb
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/obj/Debug/net8.0/ref/WeatherDashboard.ServiceDefaults.dll

@@ -1,0 +1,516 @@
+@page "/tasks"
+@rendermode InteractiveServer
+
+<PageTitle>My Tasks | TaskMaster</PageTitle>
+
+<div class="tasks-page animate-fade-in">
+    <header class="page-header mb-5">
+        <div>
+            <h1 class="gradient-text display-5">My Tasks</h1>
+            <p class="text-secondary">Organize and manage your workload effectively.</p>
+        </div>
+        <button class="btn-primary shadow-lg" @onclick="ShowCreateDialog">
+            <span>+ Create Task</span>
+        </button>
+    </header>
+
+    <div class="filters-bar glass mb-4">
+        <div class="filter-item">
+            <span class="filter-label">Status</span>
+            <select @bind="FilterStatus" @bind:after="LoadTasks" class="form-select">
+                <option value="">All Statuses</option>
+                <option value="0">To Do</option>
+                <option value="1">In Progress</option>
+                <option value="2">Review</option>
+                <option value="3">Done</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <span class="filter-label">Priority</span>
+            <select @bind="FilterPriority" @bind:after="LoadTasks" class="form-select">
+                <option value="">All Priorities</option>
+                <option value="3">Critical</option>
+                <option value="2">High</option>
+                <option value="1">Medium</option>
+                <option value="0">Low</option>
+            </select>
+        </div>
+    </div>
+
+    @if (IsLoading)
+    {
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Fetching your tasks...</p>
+        </div>
+    }
+    else if (TaskList is null || !TaskList.Any())
+    {
+        <div class="empty-state glass">
+            <span class="empty-icon">📂</span>
+            <h3>No tasks found</h3>
+            <p>Try adjusting your filters or create a new task to get started.</p>
+            <button class="btn-secondary mt-3" @onclick="ShowCreateDialog">Create First Task</button>
+        </div>
+    }
+    else
+    {
+        <div class="tasks-grid">
+            @foreach (var task in TaskList)
+            {
+                <div class="task-card glass @GetPriorityClass(task.Priority) @(task.Status == TaskItemStatus.Done ? "completed" : "")">
+                    <div class="task-card-header">
+                        <span class="priority-tag">@task.Priority</span>
+                        <div class="task-options dropdown">
+                            <span class="status-tag @task.Status.ToString().ToLower()">@GetStatusLabel(task.Status)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="task-card-body">
+                        <h3 class="task-title">@task.Title</h3>
+                        @if (!string.IsNullOrEmpty(task.Description))
+                        {
+                            <p class="task-desc">@task.Description</p>
+                        }
+                    </div>
+
+                    <div class="task-card-footer">
+                        <div class="meta-info">
+                            @if (task.DueDate.HasValue)
+                            {
+                                <div class="due-info @(IsOverdue(task) ? "overdue" : "")">
+                                    <span class="icon">📅</span>
+                                    <span>@task.DueDate.Value.ToString("MMM dd")</span>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(task.AssignedTo))
+                            {
+                                <div class="assignee-info">
+                                    <span class="icon">👤</span>
+                                    <span>@task.AssignedTo</span>
+                                </div>
+                            }
+                        </div>
+                        <div class="actions">
+                            @if (task.Status != TaskItemStatus.Done)
+                            {
+                                <button class="action-btn success" @onclick="() => MarkAsDone(task)" title="Complete">✓</button>
+                            }
+                            <button class="action-btn" @onclick="() => EditTask(task)" title="Edit">✏️</button>
+                            <button class="action-btn danger" @onclick="() => DeleteTask(task)" title="Delete">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@if (ShowDialog)
+{
+    <div class="modal-backdrop show"></div>
+    <div class="modal show d-block animate-fade-in" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass shadow-2xl">
+                <div class="modal-header border-0">
+                    <h2 class="modal-title gradient-text">@(EditingTask?.Id > 0 ? "Edit Task" : "New Task")</h2>
+                    <button type="button" class="btn-close btn-close-white" @onclick="CloseDialog"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-secondary">Title</label>
+                        <input type="text" @bind="EditingTask!.Title" class="form-control" placeholder="What needs to be done?" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary">Description</label>
+                        <textarea @bind="EditingTask!.Description" class="form-control" rows="3" placeholder="Add more details..."></textarea>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label text-secondary">Priority</label>
+                            <select @bind="EditingTask!.Priority" class="form-select">
+                                <option value="0">Low</option>
+                                <option value="1">Medium</option>
+                                <option value="2">High</option>
+                                <option value="3">Critical</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label class="form-label text-secondary">Status</label>
+                            <select @bind="EditingTask!.Status" class="form-select">
+                                <option value="0">To Do</option>
+                                <option value="1">In Progress</option>
+                                <option value="2">Review</option>
+                                <option value="3">Done</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="form-label text-secondary">Due Date</label>
+                            <input type="date" @bind="EditingTask!.DueDate" class="form-control" />
+                        </div>
+                        <div class="col">
+                            <label class="form-label text-secondary">Assigned To</label>
+                            <input type="text" @bind="EditingTask!.AssignedTo" class="form-control" placeholder="User name" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn-secondary px-4 py-2" @onclick="CloseDialog">Cancel</button>
+                    <button type="button" class="btn-primary px-4 py-2" @onclick="SaveTask" disabled="@string.IsNullOrWhiteSpace(EditingTask?.Title)">
+                        @(EditingTask?.Id > 0 ? "Update Changes" : "Create Task")
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<TaskItem>? TaskList { get; set; }
+    private bool IsLoading { get; set; } = true;
+    private bool ShowDialog { get; set; }
+    private TaskItem? EditingTask { get; set; }
+    private string FilterStatus { get; set; } = "";
+    private string FilterPriority { get; set; } = "";
+
+    [Inject]
+    public TaskManagerApiClient ApiClient { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTasks();
+    }
+
+    private async Task LoadTasks()
+    {
+        IsLoading = true;
+        try
+        {
+            TaskItemStatus? status = string.IsNullOrEmpty(FilterStatus) ? null : (TaskItemStatus)int.Parse(FilterStatus);
+            TaskPriority? priority = string.IsNullOrEmpty(FilterPriority) ? null : (TaskPriority)int.Parse(FilterPriority);
+            TaskList = await ApiClient.GetTasksAsync(status, priority);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading tasks: {ex.Message}");
+            TaskList = [];
+        }
+        IsLoading = false;
+    }
+
+    private void ShowCreateDialog()
+    {
+        EditingTask = new TaskItem { DueDate = DateTime.Today.AddDays(7) };
+        ShowDialog = true;
+    }
+
+    private void EditTask(TaskItem task)
+    {
+        EditingTask = new TaskItem
+        {
+            Id = task.Id,
+            Title = task.Title,
+            Description = task.Description,
+            Priority = task.Priority,
+            Status = task.Status,
+            DueDate = task.DueDate,
+            AssignedTo = task.AssignedTo,
+            Tags = task.Tags
+        };
+        ShowDialog = true;
+    }
+
+    private void CloseDialog()
+    {
+        ShowDialog = false;
+        EditingTask = null;
+    }
+
+    private async Task SaveTask()
+    {
+        if (EditingTask is null || string.IsNullOrWhiteSpace(EditingTask.Title)) return;
+
+        try
+        {
+            if (EditingTask.Id > 0)
+            {
+                await ApiClient.UpdateTaskAsync(EditingTask.Id, EditingTask);
+            }
+            else
+            {
+                await ApiClient.CreateTaskAsync(EditingTask);
+            }
+            await LoadTasks();
+            CloseDialog();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error saving task: {ex.Message}");
+        }
+    }
+
+    private async Task MarkAsDone(TaskItem task)
+    {
+        task.Status = TaskItemStatus.Done;
+        try
+        {
+            await ApiClient.UpdateTaskAsync(task.Id, task);
+            await LoadTasks();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error updating task: {ex.Message}");
+        }
+    }
+
+    private async Task DeleteTask(TaskItem task)
+    {
+        try
+        {
+            await ApiClient.DeleteTaskAsync(task.Id);
+            await LoadTasks();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error deleting task: {ex.Message}");
+        }
+    }
+
+    private string GetPriorityClass(TaskPriority priority) => priority switch
+    {
+        TaskPriority.Critical => "critical",
+        TaskPriority.High => "high",
+        TaskPriority.Medium => "medium",
+        _ => "low"
+    };
+
+    private string GetStatusLabel(TaskItemStatus status) => status switch
+    {
+        TaskItemStatus.Todo => "To Do",
+        TaskItemStatus.InProgress => "Working",
+        TaskItemStatus.Review => "Review",
+        TaskItemStatus.Done => "Completed",
+        _ => "Archived"
+    };
+
+    private bool IsOverdue(TaskItem task) =>
+        task.DueDate.HasValue && task.DueDate.Value.Date < DateTime.Today && task.Status != TaskItemStatus.Done;
+}
+
+<style>
+    .tasks-page {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Filters Bar */
+    .filters-bar {
+        display: flex;
+        gap: 2rem;
+        padding: 1rem 2rem;
+        border-radius: 16px;
+    }
+
+    .filter-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .filter-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        letter-spacing: 0.5px;
+    }
+
+    .form-select {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--surface-border);
+        color: white;
+        border-radius: 8px;
+        padding: 0.4rem 1rem;
+    }
+
+    /* Tasks Grid */
+    .tasks-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .task-card {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-top-width: 4px;
+        position: relative;
+    }
+
+    .task-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .task-card.critical { border-top-color: var(--danger); }
+    .task-card.high { border-top-color: var(--warning); }
+    .task-card.medium { border-top-color: var(--primary); }
+    .task-card.low { border-top-color: var(--success); }
+
+    .task-card.completed {
+        opacity: 0.6;
+    }
+
+    /* Card Header */
+    .task-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .priority-tag {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-secondary);
+    }
+
+    .status-tag {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--surface-border);
+    }
+
+    .status-tag.todo { color: var(--text-secondary); }
+    .status-tag.inprogress { color: var(--warning); border-color: rgba(245, 158, 11, 0.2); }
+    .status-tag.review { color: var(--accent); border-color: rgba(139, 92, 246, 0.2); }
+    .status-tag.done { color: var(--success); border-color: rgba(16, 185, 129, 0.2); }
+
+    /* Card Body */
+    .task-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .task-desc {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Card Footer */
+    .task-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-top: auto;
+    }
+
+    .meta-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+    }
+
+    .icon { margin-right: 0.5rem; }
+
+    .due-info.overdue {
+        color: var(--danger);
+        font-weight: 600;
+    }
+
+    .actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid var(--surface-border);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+        border-color: var(--text-secondary);
+    }
+
+    .action-btn.success:hover {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success);
+        border-color: var(--success);
+    }
+
+    .action-btn.danger:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+        border-color: var(--danger);
+    }
+
+    /* Modal Backdrop */
+    .modal-backdrop {
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(8px);
+    }
+
+    .modal-content {
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 1rem;
+    }
+
+    /* Loading state */
+    .loading-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 5rem;
+        color: var(--text-secondary);
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(99, 102, 241, 0.1);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+    }
+
+    @@keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>

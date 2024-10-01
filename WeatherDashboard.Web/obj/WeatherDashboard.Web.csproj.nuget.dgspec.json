@@ -1,0 +1,164 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.Web/WeatherDashboard.Web.csproj": {}
+  },
+  "projects": {
+    "/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/WeatherDashboard.ServiceDefaults.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/WeatherDashboard.ServiceDefaults.csproj",
+        "projectName": "WeatherDashboard.ServiceDefaults",
+        "projectPath": "/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/WeatherDashboard.ServiceDefaults.csproj",
+        "packagesPath": "/Users/jordan_mbp/.nuget/packages/",
+        "outputPath": "/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/jordan_mbp/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.Extensions.Http.Resilience": {
+              "target": "Package",
+              "version": "[8.10.0, )"
+            },
+            "Microsoft.Extensions.ServiceDiscovery": {
+              "target": "Package",
+              "version": "[8.2.2, )"
+            },
+            "OpenTelemetry.Exporter.OpenTelemetryProtocol": {
+              "target": "Package",
+              "version": "[1.9.0, )"
+            },
+            "OpenTelemetry.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[1.9.0, )"
+            },
+            "OpenTelemetry.Instrumentation.AspNetCore": {
+              "target": "Package",
+              "version": "[1.9.0, )"
+            },
+            "OpenTelemetry.Instrumentation.Http": {
+              "target": "Package",
+              "version": "[1.9.0, )"
+            },
+            "OpenTelemetry.Instrumentation.Runtime": {
+              "target": "Package",
+              "version": "[1.9.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.Web/WeatherDashboard.Web.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.Web/WeatherDashboard.Web.csproj",
+        "projectName": "WeatherDashboard.Web",
+        "projectPath": "/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.Web/WeatherDashboard.Web.csproj",
+        "packagesPath": "/Users/jordan_mbp/.nuget/packages/",
+        "outputPath": "/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.Web/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/jordan_mbp/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/WeatherDashboard.ServiceDefaults.csproj": {
+                "projectPath": "/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/WeatherDashboard.ServiceDefaults/WeatherDashboard.ServiceDefaults.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

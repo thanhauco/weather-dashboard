@@ -1,0 +1,279 @@
+@page "/projects"
+
+<PageTitle>Projects | TaskMaster</PageTitle>
+
+<div class="projects-page animate-fade-in">
+    <header class="page-header mb-5">
+        <div>
+            <h1 class="gradient-text display-5">Projects</h1>
+            <p class="text-secondary">Manage your workspaces and track collective progress.</p>
+        </div>
+    </header>
+
+    @if (ProjectList is null)
+    {
+        <div class="loading-grid">
+            <div class="glass skeleton-card"></div>
+            <div class="glass skeleton-card"></div>
+            <div class="glass skeleton-card"></div>
+        </div>
+    }
+    else if (!ProjectList.Any())
+    {
+        <div class="empty-state glass">
+            <span class="empty-icon">📂</span>
+            <h3>No projects yet</h3>
+            <p>Ready to start something big? Projects help you group related tasks.</p>
+        </div>
+    }
+    else
+    {
+        <div class="projects-grid">
+            @foreach (var project in ProjectList)
+            {
+                <div class="project-card glass" style="--project-color: @project.Color">
+                    <div class="project-header">
+                        <div class="project-avatar" style="background: @project.Color">
+                            @GetProjectInitial(project.Name)
+                            <div class="avatar-glow" style="background: @project.Color"></div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-name">@project.Name</h3>
+                            @if (!string.IsNullOrEmpty(project.Description))
+                            {
+                                <p class="project-desc">@project.Description</p>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="project-stats-container">
+                        <div class="stats-meta">
+                            <span class="progress-label">Completion Status</span>
+                            <span class="progress-value">@GetProgressPercent(project)%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: @GetProgressWidth(project); background: @project.Color"></div>
+                        </div>
+                        <div class="tasks-summary">
+                            <div class="summary-item">
+                                <span class="val">@project.CompletedCount</span>
+                                <span class="lbl">Done</span>
+                            </div>
+                            <div class="summary-divider"></div>
+                            <div class="summary-item">
+                                <span class="val">@(project.TaskCount - project.CompletedCount)</span>
+                                <span class="lbl">Active</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-footer">
+                        <a href="/tasks?projectId=@project.Id" class="btn-project-action">
+                            <span>Explore Tasks</span>
+                            <span class="arrow">→</span>
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<ProjectSummary>? ProjectList { get; set; }
+
+    [Inject]
+    public TaskManagerApiClient ApiClient { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            ProjectList = await ApiClient.GetProjectsAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading projects: {ex.Message}");
+            ProjectList = [];
+        }
+    }
+
+    private string GetProjectInitial(string name) =>
+        string.IsNullOrEmpty(name) ? "?" : name[0].ToString().ToUpper();
+
+    private string GetProgressWidth(ProjectSummary project) =>
+        project.TaskCount == 0 ? "0%" : $"{(project.CompletedCount * 100 / project.TaskCount)}%";
+
+    private int GetProgressPercent(ProjectSummary project) =>
+        project.TaskCount == 0 ? 0 : (project.CompletedCount * 100 / project.TaskCount);
+}
+
+<style>
+    .projects-page {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 2rem;
+    }
+
+    .project-card {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid var(--surface-border);
+    }
+
+    .project-card:hover {
+        transform: translateY(-8px);
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .project-header {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .project-avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: white;
+        position: relative;
+        z-index: 1;
+    }
+
+    .avatar-glow {
+        position: absolute;
+        inset: 0;
+        filter: blur(15px);
+        opacity: 0.4;
+        z-index: -1;
+        border-radius: 18px;
+    }
+
+    .project-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+
+    .project-desc {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.5;
+    }
+
+    /* Stats container */
+    .project-stats-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .stats-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .progress-label { color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .progress-track {
+        height: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        border-radius: 5px;
+        transition: width 1s ease-out;
+    }
+
+    .tasks-summary {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .summary-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .summary-item .val {
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .summary-item .lbl {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+    }
+
+    .summary-divider {
+        width: 1px;
+        height: 24px;
+        background: var(--surface-border);
+    }
+
+    /* Footer action */
+    .btn-project-action {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--surface-border);
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .btn-project-action:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--text-secondary);
+        color: white;
+    }
+
+    .btn-project-action .arrow {
+        transition: transform 0.2s;
+    }
+
+    .btn-project-action:hover .arrow {
+        transform: translateX(5px);
+    }
+
+    /* Loading/Empty */
+    .loading-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 2rem;
+    }
+
+    .skeleton-card {
+        height: 280px;
+    }
+</style>

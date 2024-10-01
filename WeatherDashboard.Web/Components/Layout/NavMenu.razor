@@ -1,0 +1,37 @@
+﻿<div class="top-row ps-3 navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">
+            <span class="gradient-text">TaskMaster</span>
+        </a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="me-2">📁</span> Dashboard
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="tasks">
+                <span class="me-2">🎯</span> My Tasks
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="projects">
+                <span class="me-2">🏗️</span> Projects
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="weather">
+                <span class="me-2">🌦️</span> Weather
+            </NavLink>
+        </div>
+    </nav>
+</div>

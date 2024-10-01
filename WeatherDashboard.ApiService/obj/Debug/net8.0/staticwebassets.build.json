@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "RxStOkJkrJWu2Z4+fugMP2p7Ol6GZsSd/WFKuOs0NZo=",
+  "Source": "WeatherDashboard.ApiService",
+  "BasePath": "_content/WeatherDashboard.ApiService",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
