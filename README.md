@@ -1,6 +1,16 @@
-# 📋 Task Manager - .NET Aspire Distributed Application
+# 📋 TaskMaster - .NET Aspire Distributed Application
 
-A modern task management application built with **.NET Aspire** demonstrating cloud-native distributed application development with PostgreSQL, Redis, and a Blazor Server frontend.
+A premium, modern task management application built with **.NET Aspire**, PostgreSQL, and Redis.
+
+## 📸 Screenshots
+
+### Dashboard
+
+![Dashboard](docs/screenshots/dashboard.png)
+
+### Projects
+
+![Projects](docs/screenshots/projects.png)
 
 ## 🏗️ Architecture
 
@@ -164,37 +174,3 @@ ruby-andromeda/
 ## 📝 License
 
 This project is for educational purposes demonstrating .NET Aspire capabilities.
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
