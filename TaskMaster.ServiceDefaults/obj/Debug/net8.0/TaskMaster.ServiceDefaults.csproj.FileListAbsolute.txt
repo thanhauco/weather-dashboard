@@ -1,0 +1,13 @@
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/TaskMaster.ServiceDefaults/bin/Debug/net8.0/TaskMaster.ServiceDefaults.deps.json
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/TaskMaster.ServiceDefaults/bin/Debug/net8.0/TaskMaster.ServiceDefaults.dll
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/TaskMaster.ServiceDefaults/bin/Debug/net8.0/TaskMaster.ServiceDefaults.pdb
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/TaskMaster.ServiceDefaults/obj/Debug/net8.0/TaskMaster.ServiceDefaults.csproj.AssemblyReference.cache
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/TaskMaster.ServiceDefaults/obj/Debug/net8.0/TaskMaster.ServiceDefaults.GeneratedMSBuildEditorConfig.editorconfig
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/TaskMaster.ServiceDefaults/obj/Debug/net8.0/TaskMaster.ServiceDefaults.AssemblyInfoInputs.cache
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/TaskMaster.ServiceDefaults/obj/Debug/net8.0/TaskMaster.ServiceDefaults.AssemblyInfo.cs
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/TaskMaster.ServiceDefaults/obj/Debug/net8.0/TaskMaster.ServiceDefaults.csproj.CoreCompileInputs.cache
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/TaskMaster.ServiceDefaults/obj/Debug/net8.0/TaskMaster.ServiceDefaults.sourcelink.json
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/TaskMaster.ServiceDefaults/obj/Debug/net8.0/TaskMaster.ServiceDefaults.dll
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/TaskMaster.ServiceDefaults/obj/Debug/net8.0/refint/TaskMaster.ServiceDefaults.dll
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/TaskMaster.ServiceDefaults/obj/Debug/net8.0/TaskMaster.ServiceDefaults.pdb
+/Users/jordan_mbp/.gemini/antigravity/playground/ruby-andromeda/TaskMaster.ServiceDefaults/obj/Debug/net8.0/ref/TaskMaster.ServiceDefaults.dll

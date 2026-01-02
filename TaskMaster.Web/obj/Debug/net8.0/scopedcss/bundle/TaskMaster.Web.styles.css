@@ -1,0 +1,183 @@
+/* _content/TaskMaster.Web/Components/Layout/MainLayout.razor.rz.scp.css */
+.page[b-4hpoybhe4p] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main[b-4hpoybhe4p] {
+    flex: 1;
+}
+
+.sidebar[b-4hpoybhe4p] {
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid var(--surface-border);
+}
+
+.top-row[b-4hpoybhe4p] {
+    background: transparent;
+    justify-content: flex-end;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.top-row[b-4hpoybhe4p]  a, .top-row[b-4hpoybhe4p]  .btn-link {
+    white-space: nowrap;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.top-row[b-4hpoybhe4p]  a:hover, .top-row[b-4hpoybhe4p]  .btn-link:hover {
+    color: var(--text-primary);
+}
+
+@media (max-width: 640.98px) {
+    .top-row[b-4hpoybhe4p] {
+        justify-content: space-between;
+    }
+
+    .sidebar[b-4hpoybhe4p] {
+        border-right: none;
+        border-bottom: 1px solid var(--surface-border);
+    }
+}
+
+@media (min-width: 641px) {
+    .page[b-4hpoybhe4p] {
+        flex-direction: row;
+    }
+
+    .sidebar[b-4hpoybhe4p] {
+        width: 270px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .top-row[b-4hpoybhe4p] {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .top-row[b-4hpoybhe4p], article[b-4hpoybhe4p] {
+        padding-left: 4rem !important;
+        padding-right: 4rem !important;
+    }
+}
+
+#blazor-error-ui[b-4hpoybhe4p] {
+    background: var(--danger);
+    color: white;
+    bottom: 0;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+    display: none;
+    left: 0;
+    padding: 1rem 2rem;
+    position: fixed;
+    width: 100%;
+    z-index: 2000;
+}
+
+#blazor-error-ui .dismiss[b-4hpoybhe4p] {
+    cursor: pointer;
+    position: absolute;
+    right: 1.5rem;
+    top: 1rem;
+    font-size: 1.25rem;
+}
+/* _content/TaskMaster.Web/Components/Layout/NavMenu.razor.rz.scp.css */
+.navbar-toggler[b-ewi6bhzb4r] {
+    appearance: none;
+    cursor: pointer;
+    width: 3rem;
+    height: 3rem;
+    color: white;
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 12px;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.top-row[b-ewi6bhzb4r] {
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+}
+
+.navbar-brand[b-ewi6bhzb4r] {
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-item[b-ewi6bhzb4r] {
+    padding: 0.25rem 1rem;
+}
+
+.nav-item[b-ewi6bhzb4r]  a {
+    color: var(--text-secondary);
+    border-radius: 12px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.nav-item[b-ewi6bhzb4r]  a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    transform: translateX(4px);
+}
+
+.nav-item[b-ewi6bhzb4r]  a.active {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(236, 72, 153, 0.1));
+    color: var(--text-primary);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item[b-ewi6bhzb4r]  a.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 4px;
+    height: 20px;
+    background: var(--primary);
+    border-radius: 0 4px 4px 0;
+}
+
+.nav-scrollable[b-ewi6bhzb4r] {
+    display: none;
+}
+
+@media (min-width: 641px) {
+    .navbar-toggler[b-ewi6bhzb4r] {
+        display: none;
+    }
+
+    .nav-scrollable[b-ewi6bhzb4r] {
+        display: block;
+        height: calc(100vh - 4rem);
+        overflow-y: auto;
+        padding-top: 1rem;
+    }
+}

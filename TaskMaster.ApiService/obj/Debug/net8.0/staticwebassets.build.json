@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "SdljgbHkFXablBHbqIh6JdZy4i/jEcukZidO6ZmS64o=",
+  "Source": "TaskMaster.ApiService",
+  "BasePath": "_content/TaskMaster.ApiService",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

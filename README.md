@@ -87,7 +87,7 @@ A premium, modern task management application built with **.NET Aspire**, Postgr
 2. **Run the Aspire AppHost**
 
    ```bash
-   dotnet run --project WeatherDashboard.AppHost
+   dotnet run --project TaskMaster.AppHost
    ```
 
 3. **Open the Aspire Dashboard**
@@ -103,16 +103,16 @@ A premium, modern task management application built with **.NET Aspire**, Postgr
 
 ```
 ruby-andromeda/
-├── WeatherDashboard.AppHost/          # Aspire orchestration
+├── TaskMaster.AppHost/          # Aspire orchestration
 │   └── Program.cs                     # Service composition
-├── WeatherDashboard.ApiService/       # REST API
+├── TaskMaster.ApiService/       # REST API
 │   ├── Program.cs                     # API endpoints
 │   ├── Data/
 │   │   └── TaskManagerDbContext.cs    # EF Core DbContext
 │   └── Models/
 │       ├── TaskItem.cs                # Task entity
 │       └── Project.cs                 # Project entity
-├── WeatherDashboard.Web/              # Blazor Server frontend
+├── TaskMaster.Web/              # Blazor Server frontend
 │   ├── TaskManagerApiClient.cs        # Typed HTTP client
 │   └── Components/
 │       └── Pages/
@@ -120,7 +120,7 @@ ruby-andromeda/
 │           ├── Tasks.razor            # Task management
 │           ├── Projects.razor         # Project view
 │           └── Weather.razor          # Weather demo
-└── WeatherDashboard.ServiceDefaults/  # Shared configuration
+└── TaskMaster.ServiceDefaults/  # Shared configuration
 ```
 
 ## 🔌 API Endpoints
